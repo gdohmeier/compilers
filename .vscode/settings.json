@@ -1,0 +1,11 @@
+{
+    "files.associations": {
+        "LIST.C": "cpp",
+        "COMPACT.C": "cpp",
+        "COMMON.H": "cpp",
+        "SCANNER.C": "cpp",
+        "TOKEN1.C": "cpp",
+        "TOKEN2.C": "cpp",
+        "ERROR.C": "cpp"
+    }
+}
