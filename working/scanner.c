@@ -10,13 +10,25 @@
 /*                                                              */
 /*      Copyright (c) 1991 by Ronald Mak                        */
 /*      For instructional purposes only.  No warranties.        */
+/*  Updates                                                     */
+/*   Gary Dohmeier: 01/02/22:                                   */
+/*        update to run on mac osx / linus w/gcc                */
 /*                                                              */
 /****************************************************************/
 
-#include <stdio.h>
+/* #include <stdio.h>
 #include <math.h>
 #include <sys/types.h>
 #include <sys/timeb.h>
+#include "common.h"
+#include "error.h"
+#include "scanner.h"
+ */
+#include <stdio.h>
+#include <math.h>
+#include <sys/_types.h>
+#include <sys/time.h>
+//#include <string.h>
 #include "common.h"
 #include "error.h"
 #include "scanner.h"
@@ -93,30 +105,16 @@ RW_STRUCT *rw_table[] = {
 };
 
 /*--------------------------------------------------------------*/
-/*  Token lists                                                 */
-/*--------------------------------------------------------------*/
-
-TOKEN_CODE statement_start_list[]   = {BEGIN, CASE, FOR, IF, REPEAT,
-				       WHILE, IDENTIFIER, 0};
-
-TOKEN_CODE statement_end_list[]     = {SEMICOLON, END, ELSE, UNTIL,
-				       END_OF_FILE, 0};
-
-TOKEN_CODE declaration_start_list[] = {CONST, TYPE, VAR, PROCEDURE,
-				       FUNCTION, 0};
-
-/*--------------------------------------------------------------*/
 /*  Globals							*/
 /*--------------------------------------------------------------*/
 
-char	    ch;			/* current input character */
-TOKEN_CODE  token;		/* code of current token */
-LITERAL     literal;		/* value of literal */
+char	    ch;		        	/* current input character */
+TOKEN_CODE  token;	        	/* code of current token */
+LITERAL     literal;	    	/* value of literal */
 int         buffer_offset;      /* char offset into source buffer */
 int         level = 0;          /* current nesting level */
-int	    line_number = 0;	/* current line number */
+int	        line_number = 0;	/* current line number */
 BOOLEAN     print_flag = TRUE;  /* TRUE to print source lines */
-BOOLEAN     block_flag = FALSE; /* TRUE only when parsing a block */
 
 char source_buffer[MAX_SOURCE_LINE_LENGTH]; /* source file buffer */
 char token_string[MAX_TOKEN_STRING_LENGTH]; /* token string */
@@ -136,6 +134,8 @@ char date[DATE_STRING_LENGTH];          /* current date and time */
 FILE *source_file;
 
 CHAR_CODE char_table[256];
+
+char ERR_EOF[] = "*** ERROR: Unexpected end of file.\n";
 
 /*--------------------------------------------------------------*/
 /*  char_code           Return the character code of ch.        */
@@ -628,65 +628,6 @@ accumulate_value(valuep, error_code)
     *valuep = value;
 }
 
-		/********************************/
-		/*                              */
-		/*      Token testers           */
-		/*                              */
-		/********************************/
-
-/*--------------------------------------------------------------*/
-/*  token_in            Return TRUE if the current token is in  */
-/*                      the token list, else return FALSE.      */
-/*--------------------------------------------------------------*/
-
-    BOOLEAN
-token_in(token_list)
-
-    TOKEN_CODE token_list[];
-
-{
-    TOKEN_CODE *tokenp;
-
-    if (token_list == NULL) return(FALSE);
-
-    for (tokenp = &token_list[0]; *tokenp; ++tokenp) {
-	if (token == *tokenp) return(TRUE);
-    }
-
-    return(FALSE);
-}
-
-/*--------------------------------------------------------------*/
-/*  synchronize         If the current token is not in one of   */
-/*                      the token lists, flag it as an error.   */
-/*                      Then skip tokens until one that is in   */
-/*                      one of the token lists.                 */
-/*--------------------------------------------------------------*/
-
-synchronize(token_list1, token_list2, token_list3)
-
-    TOKEN_CODE token_list1[], token_list2[], token_list3[];
-
-{
-    BOOLEAN error_flag = (! token_in(token_list1)) &&
-			 (! token_in(token_list2)) &&
-			 (! token_in(token_list3));
-
-    if (error_flag) {
-	error(token == END_OF_FILE ? UNEXPECTED_END_OF_FILE
-				   : UNEXPECTED_TOKEN);
-
-	/*
-	--  Skip tokens to resynchronize.
-	*/
-	while ((! token_in(token_list1)) &&
-	       (! token_in(token_list2)) &&
-	       (! token_in(token_list3)) &&
-	       (token != END_OF_FILE))
-	    get_token();
-    }
-}
-
 
 /*--------------------------------------------------------------*/
 /*  is_reserved_word	Check to see if a word token is a	*/
@@ -770,18 +711,23 @@ close_source_file()
 /*                      for the end of file.                    */
 /*--------------------------------------------------------------*/
 
-BOOLEAN get_source_line(void)
+    BOOLEAN
+get_source_line()
+
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
 
     if ((fgets(source_buffer, MAX_SOURCE_LINE_LENGTH,
 				    source_file)) != NULL) {
-        ++line_number;
+	++line_number;
 
-        sprintf(print_buffer, "%4d %d: %s",line_number, level, source_buffer);
-        print_line(print_buffer);
+	if (print_flag) {
+	    sprintf(print_buffer, "%4d %d: %s",
+			  line_number, level, source_buffer);
+	    print_line(print_buffer);
+	}
 
-        return(TRUE);
+	return(TRUE);
     }
     else return(FALSE);
 }
@@ -797,7 +743,10 @@ BOOLEAN get_source_line(void)
 /*                      the current page is full.               */
 /*--------------------------------------------------------------*/
 
-void print_line(char line[])   
+print_line(line)
+
+    char line[];        /* line to be printed */
+
 {
     char save_ch;
     char *save_chp = NULL;
@@ -807,10 +756,8 @@ void print_line(char line[])
 	line_count = 1;
     };
 
-    if (strlen(line) > MAX_PRINT_LINE_LENGTH)
-	save_chp = &line[MAX_PRINT_LINE_LENGTH];
-
-    if (save_chp) {
+    if (strlen(line) > MAX_PRINT_LINE_LENGTH) {
+	save_chp  = &line[MAX_PRINT_LINE_LENGTH];
 	save_ch   = *save_chp;
 	*save_chp = '\0';
     }
@@ -846,7 +793,8 @@ init_page_header(name)
 /*                      the next page.                          */
 /*--------------------------------------------------------------*/
 
-void print_page_header(void)
+print_page_header()
+
 {
     putchar(FORM_FEED_CHAR);
     printf("Page %d   %s   %s\n\n", ++page_number, source_name, date);

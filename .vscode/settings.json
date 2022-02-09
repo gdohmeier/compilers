@@ -6,6 +6,7 @@
         "SCANNER.C": "cpp",
         "TOKEN1.C": "cpp",
         "TOKEN2.C": "cpp",
-        "ERROR.C": "cpp"
+        "ERROR.C": "cpp",
+        "EXPR.C": "cpp"
     }
 }
