@@ -7,6 +7,10 @@
         "TOKEN1.C": "cpp",
         "TOKEN2.C": "cpp",
         "ERROR.C": "cpp",
-        "EXPR.C": "cpp"
+        "EXPR.C": "cpp",
+        "EXECSTD.C": "cpp",
+        "EXECSTMT.C": "cpp",
+        "SCANNER.H": "cpp",
+        "ERROR.H": "cpp"
     }
 }

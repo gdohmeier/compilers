@@ -85,4 +85,7 @@ typedef enum {
     UNIMPLEMENTED_FEATURE,
 } ERROR_CODE;
 
+void error(ERROR_CODE code);
+
+
 #endif

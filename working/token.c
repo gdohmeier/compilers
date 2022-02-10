@@ -4,7 +4,7 @@
 /*                                                              */
 /*      Recognize Pascal tokens.                                */
 /*                                                              */
-/*      FILE:       token2.c                                    */
+/*      FILE:       token.c                                    */
 /*                                                              */
 /*      REQUIRES:   Modules error, scanner                      */
 /*                                                              */
@@ -14,6 +14,9 @@
 /*                                                              */
 /*      Copyright (c) 1991 by Ronald Mak                        */
 /*      For instructional purposes only.  No warranties.        */
+/*  Updates                                                     */
+/*   Gary Dohmeier: 01/02/22:                                   */
+/*        update to run on mac osx / linus w/gcc                */
 /*                                                              */
 /****************************************************************/
 
@@ -46,30 +49,47 @@ extern TOKEN_CODE token;
 extern char       token_string[];
 extern LITERAL    literal;
 
+
+void print_token(void);
+
+
+
 /*--------------------------------------------------------------*/
 /*  main                Loop to tokenize source file.           */
 /*--------------------------------------------------------------*/
 
 int main(int argc, char *argv[])
-
 {
+ 
+    fprintf (stderr, "debug: argc='%i' argv[1]='%s'.\n", argc,argv[1]);
+
     /*
-    --  Initialize the scanner.
+    --  check parametres and open filep.
     */
-    init_scanner(argv[1]);
+    if (argc <= 1) { 
+        fprintf (stderr, "syntax: tokens <path><filename>");
+        return 1;
+    } else {
+        /*
+        --  Initialize the scanner.
+        */
+       init_scanner(argv[1]);
+    }
+
+
+
 
     /*
     --  Repeatedly fetch tokens until a period
     --  or the end of file.
     */
     do {
-	get_token();
-	if (token == END_OF_FILE) {
-	    error(UNEXPECTED_END_OF_FILE);
-	    break;
-	}
-
-	print_token();
+        get_token();
+        if (token == END_OF_FILE) {
+            error(UNEXPECTED_END_OF_FILE);
+            break;
+	    }
+	    print_token();
     } while (token != PERIOD);
 
     quit_scanner();
@@ -80,8 +100,7 @@ int main(int argc, char *argv[])
 /*                      token.                                  */
 /*--------------------------------------------------------------*/
 
-print_token()
-
+void print_token(void)
 {
     char line[MAX_SOURCE_LINE_LENGTH + 32];
     char *symbol_string = symbol_strings[token];

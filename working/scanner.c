@@ -10,6 +10,7 @@
 /*                                                              */
 /*      Copyright (c) 1991 by Ronald Mak                        */
 /*      For instructional purposes only.  No warranties.        */
+/*                                                              */
 /*  Updates                                                     */
 /*   Gary Dohmeier: 01/02/22:                                   */
 /*        update to run on mac osx / linus w/gcc                */
@@ -143,21 +144,18 @@ char ERR_EOF[] = "*** ERROR: Unexpected end of file.\n";
 
 #define char_code(ch)   char_table[ch]
 
-		/********************************/
-		/*				*/
-		/*	Initialization		*/
-		/*				*/
-		/********************************/
+/********************************/
+/*				*/
+/*	Initialization		*/
+/*				*/
+/********************************/
 
 /*--------------------------------------------------------------*/
 /*  init_scanner	Initialize the scanner globals		*/
 /*			and open the source file.		*/
 /*--------------------------------------------------------------*/
 
-init_scanner(name)
-
-    char *name;		/* name of source file */
-
+void init_scanner(char *name) /* name of source file */
 {
     int ch;
 
@@ -179,25 +177,24 @@ init_scanner(name)
 /*  quit_scanner	Terminate the scanner.			*/
 /*--------------------------------------------------------------*/
 
-quit_scanner()
-
+void quit_scanner(void)
 {
     close_source_file();
 }
 
-		/********************************/
-		/*				*/
-		/*	Character routines	*/
-		/*				*/
-		/********************************/
+
+/********************************/
+/*				*/
+/*	Character routines	*/
+/*				*/
+/********************************/
 
 /*--------------------------------------------------------------*/
 /*  get_char		Set ch to the next character from the	*/
 /*			source buffer.				*/
 /*--------------------------------------------------------------*/
 
-get_char()
-
+void get_char(void)
 {
     BOOLEAN get_source_line();
 
@@ -252,8 +249,7 @@ get_char()
 /*  skip_comment        Skip over a comment.  Set ch to '}'.    */
 /*--------------------------------------------------------------*/
 
-skip_comment()
-
+void skip_comment(void)
 {
     do {
 	get_char();
@@ -266,28 +262,26 @@ skip_comment()
 /*			ch to the next nonblank character.	*/
 /*--------------------------------------------------------------*/
 
-skip_blanks()
-
+void skip_blanks(void)
 {
     while (ch == ' ') get_char();
 }
 
-		/********************************/
-		/*				*/
-		/*	Token routines		*/
-		/*				*/
-		/********************************/
+/********************************/
+/*				*/
+/*	Token routines		*/
+/*				*/
+/********************************/
 
-	/*  Note that after a token has been extracted, */
-	/*  ch is the first character after the token.  */
+/*  Note that after a token has been extracted, */
+/*  ch is the first character after the token.  */
 
 /*--------------------------------------------------------------*/
 /*  get_token		Extract the next token from the	source	*/
 /*			buffer.					*/
 /*--------------------------------------------------------------*/
 
-get_token()
-
+void get_token(void)
 {
     skip_blanks();
     tokenp = token_string;
@@ -308,8 +302,7 @@ get_token()
 /*			not.					*/
 /*--------------------------------------------------------------*/
 
-get_word()
-
+void get_word(void)
 {
     BOOLEAN is_reserved_word();
 
@@ -331,8 +324,7 @@ get_word()
 /*			to its value.  Set token to NUMBER.	*/
 /*--------------------------------------------------------------*/
 
-get_number()
-
+void get_number(void)
 {
     int     whole_count    = 0;     /* no. digits in whole part */
     int     decimal_offset = 0;     /* no. digits to move decimal */
@@ -459,8 +451,7 @@ get_number()
 /*                      literal.value.string.                   */
 /*--------------------------------------------------------------*/
 
-get_string()
-
+void get_string(void)
 {
     char *sp = literal.value.string;
 
@@ -497,8 +488,7 @@ get_string()
 /*                      character.  Set token appropriately.    */
 /*--------------------------------------------------------------*/
 
-get_special()
-
+void get_special(void)
 {
     *tokenp++ = ch;
     switch (ch) {
@@ -568,8 +558,7 @@ get_special()
 /*                      with all letters downshifted.           */
 /*--------------------------------------------------------------*/
 
-downshift_word()
-
+void downshift_word(void)
 {
     int  offset = 'a' - 'A';    /* offset to downshift a letter */
     char *wp    = word_string;
@@ -594,11 +583,9 @@ downshift_word()
 /*                      character is not a digit.               */
 /*--------------------------------------------------------------*/
 
-accumulate_value(valuep, error_code)
-
-    float      *valuep;
-    ERROR_CODE error_code;
-
+void accumulate_value(float *valuep, ERROR_CODE error_code)
+//    float *valuep;
+//    ERROR_CODE error_code;
 {
     float value = *valuep;
 
@@ -636,9 +623,7 @@ accumulate_value(valuep, error_code)
 /*			return FALSE.				*/
 /*--------------------------------------------------------------*/
 
-    BOOLEAN
-is_reserved_word()
-
+BOOLEAN is_reserved_word(void)
 {
     int       word_length = strlen(word_string);
     RW_STRUCT *rwp;
@@ -665,26 +650,23 @@ is_reserved_word()
     return(FALSE);                      /* no, it's not */
 }
 
-		/********************************/
-		/*                              */
-		/*      Source file routines	*/
-		/*                              */
-		/********************************/
+/********************************/
+/*                              */
+/*      Source file routines	*/
+/*                              */
+/********************************/
 
 /*--------------------------------------------------------------*/
 /*  open_source_file	Open the source file and fetch its	*/
 /*			first character.			*/
 /*--------------------------------------------------------------*/
 
-open_source_file(name)
-
-    char *name;		/* name of source file */
-
+void open_source_file(char *name)  /* name of source file */
 {
     if ((name == NULL) ||
 	((source_file = fopen(name, "r")) == NULL)) {
-	error(FAILED_SOURCE_FILE_OPEN);
-	exit(-FAILED_SOURCE_FILE_OPEN);
+        error(FAILED_SOURCE_FILE_OPEN);
+        exit(-FAILED_SOURCE_FILE_OPEN);
     }
 
     /*
@@ -698,8 +680,7 @@ open_source_file(name)
 /*  close_source_file	Close the source file.			*/
 /*--------------------------------------------------------------*/
 
-close_source_file()
-
+void close_source_file(void)
 {
     fclose(source_file);
 }
@@ -711,9 +692,7 @@ close_source_file()
 /*                      for the end of file.                    */
 /*--------------------------------------------------------------*/
 
-    BOOLEAN
-get_source_line()
-
+BOOLEAN get_source_line(void)
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
 
@@ -732,21 +711,17 @@ get_source_line()
     else return(FALSE);
 }
 
-		/********************************/
-		/*                              */
-		/*      Printout routines       */
-		/*                              */
-		/********************************/
+/********************************/
+/*                              */
+/*      Printout routines       */
+/*                              */
+/********************************/
 
 /*--------------------------------------------------------------*/
 /*  print_line          Print out a line.  Start a new page if  */
 /*                      the current page is full.               */
 /*--------------------------------------------------------------*/
-
-print_line(line)
-
-    char line[];        /* line to be printed */
-
+void print_line(char line[])  /* line to be printed */
 {
     char save_ch;
     char *save_chp = NULL;
@@ -770,12 +745,8 @@ print_line(line)
 /*--------------------------------------------------------------*/
 /*  init_page_header    Initialize the fields of the page       */
 /*                      header.                                 */
-/*--------------------------------------------------------------*/
-
-init_page_header(name)
-
-    char *name;         /* name of source file */
-
+/*--------------------------------------------------------------*/\
+void init_page_header(char *name)  /* name of source file */
 {
     time_t timer;
 
@@ -792,9 +763,7 @@ init_page_header(name)
 /*  print_page_header   Print the page header at the top of     */
 /*                      the next page.                          */
 /*--------------------------------------------------------------*/
-
-print_page_header()
-
+void print_page_header(void)
 {
     putchar(FORM_FEED_CHAR);
     printf("Page %d   %s   %s\n\n", ++page_number, source_name, date);

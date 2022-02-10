@@ -51,4 +51,12 @@ typedef struct {
     } value;
 } LITERAL;
 
+
+void init_scanner(char *name);
+void get_token(void);
+void quit_scanner(void);
+void print_line(char line[]);
+
+
+
 #endif

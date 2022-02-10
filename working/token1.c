@@ -183,14 +183,13 @@ BOOLEAN get_source_line(void)
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
 
-    if ((fgets(source_buffer, MAX_SOURCE_LINE_LENGTH,
-				    source_file)) != NULL) {
-	++line_number;
+    if ((fgets(source_buffer, MAX_SOURCE_LINE_LENGTH, source_file)) != NULL) {
+        ++line_number;
 
-	sprintf(print_buffer, "%4d %d: %s",line_number, level, source_buffer);
-	print_line(print_buffer);
+        sprintf(print_buffer, "%4d %d: %s",line_number, level, source_buffer);
+        print_line(print_buffer);
 
-	return(TRUE);
+        return(TRUE);
     }
     else return(FALSE);
 }
@@ -240,7 +239,8 @@ void skip_blanks(void)
 }
 
 
-/*--------------------------------------------------------------*/
+/*---------------------
+-----------------------------------------*/
 /*  open_source_file	Open the source file and fetch its	*/
 /*			first character.			*/
 /*--------------------------------------------------------------*/
