@@ -52,7 +52,7 @@ typedef struct {
 
 
 
-void open_source_file(char []);
+BOOLEAN open_source_file(char *);
 void skip_comment(void);
 void close_source_file(void);
 void get_word(void);

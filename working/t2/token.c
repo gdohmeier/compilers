@@ -64,19 +64,17 @@ void get_token(void);
 int main(int argc, char *argv[])
 {
  
-    fprintf (stderr, "debug: argc='%i' argv[1]='%s'.\n", argc,argv[1]);
+    // debug
+    //fprintf (stderr, "debug: argc='%i' argv[1]='%s'.\n", argc,argv[1]);
 
     /*
     --  check parametres and open filep.
     */
     if (argc <= 1) { 
-        fprintf (stderr, "syntax: tokens <path><filename>");
-        return 1;
+        fprintf (stderr, "syntax: list <path><filename>");
+        return -1;
     } else {
-        /*
-        --  Initialize the scanner.
-        */
-       init_scanner(argv[1]);
+        init_scanner(argv[1]);
     }
 
     /*

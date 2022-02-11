@@ -1,6 +1,7 @@
 {
     "files.associations": {
         "SCANNER.C": "cpp",
-        "TOKEN1.C": "cpp"
+        "TOKEN1.C": "cpp",
+        "EXECUTIL.C": "cpp"
     }
 }

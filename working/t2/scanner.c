@@ -19,6 +19,7 @@
 
 
 #include <stdio.h>
+#include <stdlib.h>
 #include <math.h>
 #include <sys/_types.h>
 #include <sys/time.h>
@@ -138,6 +139,8 @@ char ERR_EOF[] = "*** ERROR: Unexpected end of file.\n";
 #define char_code(ch)   char_table[ch]
 
 
+void init_page_header(char *);
+BOOLEAN open_source_file(char *);
 
 
 
@@ -157,6 +160,9 @@ void init_scanner(char *name) /* name of source file */
 {
     int ch;
 
+    // debug
+    //fprintf (stderr, "debug: name='%s'.\n", name);
+
     /*
     --  Initialize character table.
     */
@@ -167,8 +173,14 @@ void init_scanner(char *name) /* name of source file */
     char_table['\''] = QUOTE;
     char_table[EOF_CHAR] = EOF_CODE;
 
-//    init_page_header(name);
-//    open_source_file(name);
+    init_page_header(name);
+
+    if ( open_source_file(name) == FALSE ) {
+        error(FAILED_SOURCE_FILE_OPEN);
+        exit(-FAILED_SOURCE_FILE_OPEN);
+    }
+    
+
 }
 
 /*--------------------------------------------------------------*/
@@ -659,19 +671,17 @@ BOOLEAN is_reserved_word(void)
 /*			first character.			*/
 /*--------------------------------------------------------------*/
 
-void open_source_file(char *name)  /* name of source file */
+BOOLEAN open_source_file(char *name)  /* name of source file */
 {
-    if ((name == NULL) ||
-	((source_file = fopen(name, "r")) == NULL)) {
-        error(FAILED_SOURCE_FILE_OPEN);
-        //exit(-FAILED_SOURCE_FILE_OPEN);
+    if ((name == NULL) || ((source_file = fopen(name, "r")) == NULL)) {
+        return FALSE;
     }
-
     /*
     --  Fetch the first character.
     */
     bufferp = ""        ;
     get_char();
+    return TRUE;
 }
 
 /*--------------------------------------------------------------*/

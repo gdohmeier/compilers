@@ -10,7 +10,7 @@
 				"-g",
 				"${fileDirname}/*.c",
 				"-o",
-				"${fileDirname}/myProgram.out"
+				"${fileDirname}/${fileBasenameNoExtension}"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

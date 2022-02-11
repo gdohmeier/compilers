@@ -138,19 +138,21 @@ void error(ERROR_CODE code)  /* error code */
     --	Print the error message.
     */
     sprintf(message_buffer, " *** ERROR: %s.\n", message);
-    if (print_flag) print_line(message_buffer);
-    else            printf("%s", message_buffer);
+    if (print_flag) 
+        print_line(message_buffer);
+    else
+        printf("%s", message_buffer);
 
     *tokenp = '\0';
     ++error_count;
 
     if (error_count > MAX_SYNTAX_ERRORS) {
-	sprintf(message_buffer,
-		"Too many syntax errors.  Aborted.\n");
-	if (print_flag) print_line(message_buffer);
-	else            printf("%s",message_buffer);
-
-	exit(-TOO_MANY_SYNTAX_ERRORS);
+        sprintf(message_buffer,"Too many syntax errors.  Aborted.\n");
+        if (print_flag) 
+            print_line(message_buffer);
+        else
+            printf("%s",message_buffer);
+        exit(-TOO_MANY_SYNTAX_ERRORS);
     }
 }
 
