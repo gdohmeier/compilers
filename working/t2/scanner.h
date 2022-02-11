@@ -16,7 +16,6 @@
 
 #ifndef scanner_h
 #define scanner_h
-
 #include "common.h"
 
 /*--------------------------------------------------------------*/
@@ -52,11 +51,22 @@ typedef struct {
 } LITERAL;
 
 
-void init_scanner(char *name);
-void get_token(void);
-void quit_scanner(void);
-void print_line(char line[]);
+
+void open_source_file(char []);
+void skip_comment(void);
+void close_source_file(void);
+void get_word(void);
+void get_number(void);
+void get_string(void);
+void get_special(void);
+void get_number(void);
+void downshift_word(void);
+void accumulate_value(float *valuep, ERROR_CODE error_code);
+void error(ERROR_CODE code);
+void print_page_header(void);
 
 
 
-#endif
+
+
+#endif///////////

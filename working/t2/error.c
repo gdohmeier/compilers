@@ -18,6 +18,8 @@
 /****************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+
 #include "common.h"
 #include "error.h"
 
@@ -97,6 +99,7 @@ char *error_messages[] = {
     "Unimplemented feature",
 };
 
+
 /*--------------------------------------------------------------*/
 /*  Globals                                                     */
 /*--------------------------------------------------------------*/
@@ -126,15 +129,17 @@ void error(ERROR_CODE code)  /* error code */
     */
     if (print_flag) offset += 8;
     sprintf(message_buffer, "%*s^\n", offset, " ");
-    if (print_flag) print_line(message_buffer);
-    else            printf(message_buffer);
+    if (print_flag) 
+        print_line(message_buffer);
+    else
+        printf("%s",message_buffer);
 
     /*
     --	Print the error message.
     */
     sprintf(message_buffer, " *** ERROR: %s.\n", message);
     if (print_flag) print_line(message_buffer);
-    else            printf(message_buffer);
+    else            printf("%s", message_buffer);
 
     *tokenp = '\0';
     ++error_count;
@@ -143,7 +148,7 @@ void error(ERROR_CODE code)  /* error code */
 	sprintf(message_buffer,
 		"Too many syntax errors.  Aborted.\n");
 	if (print_flag) print_line(message_buffer);
-	else            printf(message_buffer);
+	else            printf("%s",message_buffer);
 
 	exit(-TOO_MANY_SYNTAX_ERRORS);
     }

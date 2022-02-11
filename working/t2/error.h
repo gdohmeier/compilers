@@ -85,7 +85,14 @@ typedef enum {
     UNIMPLEMENTED_FEATURE,
 } ERROR_CODE;
 
-void error(ERROR_CODE code);
+/* void error(ERROR_CODE);
+void init_page_header(char*):
+void open_source_file(char*);
+void close_source_file(void);
+ */
+void print_line(char[]);
+
+
 
 
 #endif

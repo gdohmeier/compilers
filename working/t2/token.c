@@ -51,6 +51,9 @@ extern LITERAL    literal;
 
 
 void print_token(void);
+void init_scanner(char *name);
+void quit_scanner(void);
+void get_token(void);
 
 
 
@@ -75,9 +78,6 @@ int main(int argc, char *argv[])
         */
        init_scanner(argv[1]);
     }
-
-
-
 
     /*
     --  Repeatedly fetch tokens until a period

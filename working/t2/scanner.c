@@ -17,19 +17,12 @@
 /*                                                              */
 /****************************************************************/
 
-/* #include <stdio.h>
-#include <math.h>
-#include <sys/types.h>
-#include <sys/timeb.h>
-#include "common.h"
-#include "error.h"
-#include "scanner.h"
- */
+
 #include <stdio.h>
 #include <math.h>
 #include <sys/_types.h>
 #include <sys/time.h>
-//#include <string.h>
+#include <string.h>
 #include "common.h"
 #include "error.h"
 #include "scanner.h"
@@ -63,42 +56,42 @@ typedef struct {
 
 RW_STRUCT rw_2[] = {
     {"do", DO}, {"if", IF}, {"in", IN}, {"of", OF}, {"or", OR},
-    {"to", TO}, {NULL, 0 },
+    {"to", TO}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_3[] = {
     {"and", AND}, {"div", DIV}, {"end", END}, {"for", FOR},
     {"mod", MOD}, {"nil", NIL}, {"not", NOT}, {"set", SET},
-    {"var", VAR}, {NULL , 0  },
+    {"var", VAR}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_4[] = {
     {"case", CASE}, {"else", ELSE}, {"file", FFILE},
     {"goto", GOTO}, {"then", THEN}, {"type", TYPE},
-    {"with", WITH}, {NULL  , 0   },
+    {"with", WITH}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_5[] = {
     {"array", ARRAY}, {"begin", BEGIN}, {"const", CONST},
     {"label", LABEL}, {"until", UNTIL}, {"while", WHILE},
-    {NULL   , 0    },
+    {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_6[] = {
     {"downto", DOWNTO}, {"packed", PACKED}, {"record", RECORD},
-    {"repeat", REPEAT}, {NULL    , 0     },
+    {"repeat", REPEAT}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_7[] = {
-    {"program", PROGRAM}, {NULL, 0},
+    {"program", PROGRAM}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_8[] = {
-    {"function", FUNCTION}, {NULL, 0},
+    {"function", FUNCTION}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT rw_9[] = {
-    {"procedure", PROCEDURE}, {NULL, 0},
+    {"procedure", PROCEDURE}, {NULL, NO_TOKEN},
 };
 
 RW_STRUCT *rw_table[] = {
@@ -144,6 +137,11 @@ char ERR_EOF[] = "*** ERROR: Unexpected end of file.\n";
 
 #define char_code(ch)   char_table[ch]
 
+
+
+
+
+
 /********************************/
 /*				*/
 /*	Initialization		*/
@@ -169,8 +167,8 @@ void init_scanner(char *name) /* name of source file */
     char_table['\''] = QUOTE;
     char_table[EOF_CHAR] = EOF_CODE;
 
-    init_page_header(name);
-    open_source_file(name);
+//    init_page_header(name);
+//    open_source_file(name);
 }
 
 /*--------------------------------------------------------------*/
@@ -666,7 +664,7 @@ void open_source_file(char *name)  /* name of source file */
     if ((name == NULL) ||
 	((source_file = fopen(name, "r")) == NULL)) {
         error(FAILED_SOURCE_FILE_OPEN);
-        exit(-FAILED_SOURCE_FILE_OPEN);
+        //exit(-FAILED_SOURCE_FILE_OPEN);
     }
 
     /*
