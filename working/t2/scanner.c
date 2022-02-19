@@ -179,8 +179,6 @@ void init_scanner(char *name) /* name of source file */
         error(FAILED_SOURCE_FILE_OPEN);
         exit(-FAILED_SOURCE_FILE_OPEN);
     }
-    
-
 }
 
 /*--------------------------------------------------------------*/
@@ -243,6 +241,10 @@ void get_char(void)
 		    break;
 
 	case '\n':  ++buffer_offset;
+		    ch = ' ';
+		    break;
+
+	case '\r':  ++buffer_offset;
 		    ch = ' ';
 		    break;
 
@@ -516,49 +518,49 @@ void get_special(void)
 	case '/':   token = SLASH;      get_char();  break;
 
 	case ':':   get_char();         /* : or := */
-		    if (ch == '=') {
-                        *tokenp++ = '=';
-			token     = COLONEQUAL;
-                        get_char();
-		    }
-		    else token = COLON;
-                    break;
+        if (ch == '=') {
+            *tokenp++ = '=';
+            token = COLONEQUAL;
+            get_char();
+        }
+        else token = COLON;
+        break;
 
 	case '<':   get_char();         /* < or <= or <> */
-		    if (ch == '=') {
-                        *tokenp++ = '=';
-			token     = LE;
-                        get_char();
-		    }
-		    else if (ch == '>') {
-			*tokenp++ = '>';
-			token     = NE;
-			get_char();
-		    }
-		    else token = LT;
-                    break;
+        if (ch == '=') {
+            *tokenp++ = '=';
+            token     = LE;
+            get_char();
+        }
+        else if (ch == '>') {
+            *tokenp++ = '>';
+            token     = NE;
+            get_char();
+        }
+        else token = LT;
+            break;
 
 	case '>':   get_char();         /* > or >= */
-		    if (ch == '=') {
-                        *tokenp++ = '=';
-			token     = GE;
-                        get_char();
-                    }
-		    else token = GT;
-                    break;
+        if (ch == '=') {
+            *tokenp++ = '=';
+            token     = GE;
+            get_char();
+        }
+        else token = GT;
+            break;
 
 	case '.':   get_char();         /* . or .. */
-		    if (ch == '.') {
-                        *tokenp++ = '.';
-			token     = DOTDOT;
-                        get_char();
-                    }
-		    else token = PERIOD;
-                    break;
+        if (ch == '.') {
+            *tokenp++ = '.';
+            token     = DOTDOT;
+            get_char();
+        }
+        else token = PERIOD;
+            break;
 
 	default:    token = ERROR;
-		    get_char();
-		    break;
+		get_char();
+		break;
     }
     *tokenp = '\0';
 }
@@ -571,8 +573,8 @@ void get_special(void)
 void downshift_word(void)
 {
     int  offset = 'a' - 'A';    /* offset to downshift a letter */
-    char *wp    = word_string;
-    char *tp    = token_string;
+    char *wp = word_string;
+    char *tp = token_string;
 
     /*
     --  Copy word into word_string.
@@ -594,8 +596,6 @@ void downshift_word(void)
 /*--------------------------------------------------------------*/
 
 void accumulate_value(float *valuep, ERROR_CODE error_code)
-//    float *valuep;
-//    ERROR_CODE error_code;
 {
     float value = *valuep;
 
@@ -635,7 +635,7 @@ void accumulate_value(float *valuep, ERROR_CODE error_code)
 
 BOOLEAN is_reserved_word(void)
 {
-    int       word_length = strlen(word_string);
+    int word_length = strlen(word_string);
     RW_STRUCT *rwp;
 
     /*
@@ -704,13 +704,11 @@ BOOLEAN get_source_line(void)
 {
     char print_buffer[MAX_SOURCE_LINE_LENGTH + 9];
 
-    if ((fgets(source_buffer, MAX_SOURCE_LINE_LENGTH,
-				    source_file)) != NULL) {
+    if ((fgets(source_buffer, MAX_SOURCE_LINE_LENGTH, source_file)) != NULL) {
 	++line_number;
 
 	if (print_flag) {
-	    sprintf(print_buffer, "%4d %d: %s",
-			  line_number, level, source_buffer);
+	    sprintf(print_buffer, "%4d %d: %s", line_number, level, source_buffer);
 	    print_line(print_buffer);
 	}
 
@@ -735,18 +733,17 @@ void print_line(char line[])  /* line to be printed */
     char *save_chp = NULL;
 
     if (++line_count > MAX_LINES_PER_PAGE) {
-	print_page_header();
-	line_count = 1;
+        print_page_header();
+        line_count = 1;
     };
 
     if (strlen(line) > MAX_PRINT_LINE_LENGTH) {
-	save_chp  = &line[MAX_PRINT_LINE_LENGTH];
-	save_ch   = *save_chp;
-	*save_chp = '\0';
+        save_chp  = &line[MAX_PRINT_LINE_LENGTH];
+        save_ch   = *save_chp;
+        *save_chp = '\0';
     }
 
     printf("%s", line);
-
     if (save_chp) *save_chp = save_ch;
 }
 
@@ -757,7 +754,6 @@ void print_line(char line[])  /* line to be printed */
 void init_page_header(char *name)  /* name of source file */
 {
     time_t timer;
-
     strncpy(source_name, name, MAX_FILE_NAME_LENGTH - 1);
 
     /*

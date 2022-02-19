@@ -51,7 +51,6 @@ typedef struct {
 } LITERAL;
 
 
-
 BOOLEAN open_source_file(char *);
 void skip_comment(void);
 void close_source_file(void);
@@ -66,7 +65,4 @@ void error(ERROR_CODE code);
 void print_page_header(void);
 
 
-
-
-
-#endif///////////
+#endif  ///////////

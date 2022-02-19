@@ -2,6 +2,9 @@
     "files.associations": {
         "SCANNER.C": "cpp",
         "TOKEN1.C": "cpp",
-        "EXECUTIL.C": "cpp"
+        "EXECUTIL.C": "cpp",
+        "TOKEN2.C": "cpp",
+        "ERROR.C": "cpp",
+        "EXECSTD.C": "cpp"
     }
 }

@@ -9,7 +9,7 @@
             "type": "cppdbg",
             "request": "launch",
             "program": "${fileDirname}/token",
-            "args": ["../data/comments.in"],
+            "args": ["${fileDirname}/../data/comments.in"],
             "stopAtEntry": false,
             "cwd": "${fileDirname}",
             "environment": [],

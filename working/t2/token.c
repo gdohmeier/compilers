@@ -82,6 +82,7 @@ int main(int argc, char *argv[])
     --  or the end of file.
     */
     do {
+        token = NO_TOKEN;
         get_token();
         if (token == END_OF_FILE) {
             error(UNEXPECTED_END_OF_FILE);
@@ -106,22 +107,23 @@ void print_token(void)
     switch (token) {
 
 	case NUMBER:
-	    if (literal.type == INTEGER_LIT)
-		sprintf(line, "     >> %-16s %d (integer)\n",
-			      symbol_string, literal.value.integer);
-	    else
-		sprintf(line, "     >> %-16s %g (real)\n",
-			      symbol_string, literal.value.real);
-            break;
+	    if (literal.type == INTEGER_LIT) {
+		    sprintf(line, "     >> %-16s %d (integer)\n",
+            symbol_string, literal.value.integer);
+        } else {
+            sprintf(line, "     >> %-16s %g (real)\n",
+            symbol_string, literal.value.real);
+        }
+        break;
 
 	case STRING:
 	    sprintf(line, "     >> %-16s '%-s'\n",
-			  symbol_string, literal.value.string);
+        symbol_string, literal.value.string);
 	    break;
 
 	default:
 	    sprintf(line, "     >> %-16s %-s\n",
-			  symbol_string, token_string);
+        symbol_string, token_string);
 	    break;
     }
     print_line(line);
