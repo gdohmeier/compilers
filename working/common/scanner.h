@@ -17,6 +17,7 @@
 #ifndef scanner_h
 #define scanner_h
 #include "common.h"
+#include "error.h"
 
 /*--------------------------------------------------------------*/
 /*  Token codes							*/

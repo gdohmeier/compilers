@@ -10,7 +10,7 @@
 				"-g",
 				"${fileDirname}/*.c",
 				"-o",
-				"${fileDirname}/${fileBasenameNoExtension}"
+				"../data/${fileBasenameNoExtension}"
 			],
 			"options": {
 				"cwd": "${fileDirname}"

@@ -483,7 +483,7 @@ int main(int argc, char *argv[])
     --  check parametres and open filep.
     */
     if (argc <= 1) { 
-        fprintf (stderr, "syntax: list <path><filename>");
+        fprintf (stderr, "syntax: token1 <path><filename>");
         return 1;
     } else {
         if ( open_source_file(argv[1]) == FALSE) {

@@ -23,8 +23,10 @@
 /****************************************************************/
 
 #include <stdio.h>
-#include "common.h"
-#include "scanner.h"
+#include <string.h>
+#include "../common/error.h"
+#include "../common/common.h"
+#include "../common/scanner.h"
 
 #define MAX_OUTPUT_RECORD_LENGTH	80
 
@@ -53,15 +55,21 @@ char *recp;                     /* pointer into output record */
 
 char output_record[MAX_OUTPUT_RECORD_LENGTH];
 
+
+void init_scanner(char *);
+void get_token(void);
+void flush_output_record(void);
+void append_blank(void);
+void append_token(void);
+void flush_output_record(void);
+void quit_scanner(void);
+
+
 /*--------------------------------------------------------------*/
 /*  main                Loop to process tokens.                 */
 /*--------------------------------------------------------------*/
 
-main(argc, argv)
-
-    int  argc;
-    char *argv[];
-
+int main(int argc, char *argv[])
 {
     TOKEN_CLASS class;		/* current token class */
     TOKEN_CLASS prev_class;	/* previous token class */
@@ -113,9 +121,7 @@ main(argc, argv)
 /*  token_class		Return the class of the current token.	*/
 /*--------------------------------------------------------------*/
 
-    TOKEN_CLASS
-token_class()
-
+TOKEN_CLASS token_class(void)
 {
     /*
     --  Nondelimiters:	identifiers, numbers, and reserved words
@@ -137,8 +143,7 @@ token_class()
 /*			or flush the record if it is full.	*/
 /*--------------------------------------------------------------*/
 
-append_blank()
-
+void append_blank(void)
 {
     if (++record_length == MAX_OUTPUT_RECORD_LENGTH - 1)
 	flush_output_record();
@@ -152,8 +157,7 @@ append_blank()
 /*			to append to the new record.		*/
 /*--------------------------------------------------------------*/
 
-append_token()
-
+void append_token(void)
 {
     int	token_length;		/* length of token string */
     
@@ -171,8 +175,7 @@ append_token()
 /*				record.				*/
 /*--------------------------------------------------------------*/
 
-flush_output_record()
-
+void flush_output_record(void)
 {
      printf("%s\n", output_record);
      recp  = output_record;

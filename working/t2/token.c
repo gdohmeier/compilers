@@ -21,9 +21,10 @@
 /****************************************************************/
 
 #include <stdio.h>
-#include "common.h"
-#include "error.h"
-#include "scanner.h"
+#include <stdlib.h>
+#include "../common/common.h"
+#include "../common/error.h"
+#include "../common/scanner.h"
 
 /*--------------------------------------------------------------*/
 /*  Token name strings                                          */
@@ -71,8 +72,11 @@ int main(int argc, char *argv[])
     --  check parametres and open filep.
     */
     if (argc <= 1) { 
-        fprintf (stderr, "syntax: list <path><filename>");
-        return -1;
+        //fprintf (stderr, "syntax: %s <path><filename>\n",argv[0]);
+        //return -1;
+        error(FAILED_SOURCE_FILE_OPEN);
+        exit(-FAILED_SOURCE_FILE_OPEN);
+
     } else {
         init_scanner(argv[1]);
     }
