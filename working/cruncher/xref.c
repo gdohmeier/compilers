@@ -19,6 +19,8 @@
 /****************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 #include "../common/common.h"
 #include "../common/scanner.h"
 #include "../common/symtab.h"
@@ -42,22 +44,35 @@ typedef struct {
 /*  Externals                                                   */
 /*--------------------------------------------------------------*/
 
-extern int        line_number;
-extern TOKEN_CODE token;
-extern char       word_string[];
+extern int   line_number;
+extern       TOKEN_CODE token;
+extern char  word_string[];
 
 extern SYMTAB_NODE_PTR symtab_root;
+
+
+//
+// prototypes
+//
+
+//void print_token(void);
+void init_scanner(char *);
+void quit_scanner(void);
+void get_token(void);
+void record_line_number(SYMTAB_NODE_PTR, int);
+void print_xref(SYMTAB_NODE_PTR);
+
+SYMTAB_NODE_PTR search_symtab(char* , SYMTAB_NODE_PTR);
+SYMTAB_NODE_PTR enter_symtab(char* , SYMTAB_NODE_PTR*);
+
+
 
 /*--------------------------------------------------------------*/
 /*  main                Loop to process identifiers.  Then      */
 /*                      print the cross-reference listing.      */
 /*--------------------------------------------------------------*/
 
-main(argc, argv)
-
-    int  argc;
-    char *argv[];
-
+int main(int argc, char *argv[])
 {
     SYMTAB_NODE_PTR np;         /* ptr to symtab entry */
     LINENUM_HEADER_PTR hp;      /* ptr to line item list header */
@@ -78,9 +93,9 @@ main(argc, argv)
 	    --  if it isn't already in there, and record the
 	    --  current line number in the symbol table entry.
 	    */
-	    np = search_symtab(word_string, symtab_root);
+	    np = search_symtab((char *) word_string, symtab_root);
 	    if (np == NULL) {
-		np = enter_symtab(word_string, &symtab_root);
+		np = enter_symtab((char *) word_string, &symtab_root);
 		hp = alloc_struct(LINENUM_HEADER);
 		hp->first_linenum = hp->last_linenum = NULL;
 		np->info = (char *) hp;
@@ -105,11 +120,9 @@ main(argc, argv)
 /*                      table entry.                            */
 /*--------------------------------------------------------------*/
 
-record_line_number(np, number)
-
-    SYMTAB_NODE_PTR np;         /* ptr to symtab entry */
-    int             number;     /* line number */
-
+void record_line_number(SYMTAB_NODE_PTR np, int number)
+//    SYMTAB_NODE_PTR np;         /* ptr to symtab entry */
+//    int             number;     /* line number */
 {
     LINENUM_ITEM_PTR   ip;      /* ptr to line item */
     LINENUM_HEADER_PTR hp;      /* ptr to line item list header */
@@ -139,10 +152,8 @@ record_line_number(np, number)
 /*                      alphabetical order.                     */
 /*--------------------------------------------------------------*/
 
-print_xref(np)
-
-    SYMTAB_NODE_PTR np;         /* ptr to subtree */
-
+void print_xref(SYMTAB_NODE_PTR np)
+//    SYMTAB_NODE_PTR np;         /* ptr to subtree */
 {
     int n;
     LINENUM_ITEM_PTR ip;        /* ptr to line item */

@@ -21,6 +21,10 @@
 /****************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
+
 #include "../common/common.h"
 #include "../common/scanner.h"
 #include "../common/symtab.h"
@@ -43,22 +47,40 @@ extern SYMTAB_NODE_PTR symtab_root;
 short index = 0;        /* symtab entry index */
 FILE  *crunch_file;
 
+
+//
+// prototypes
+//
+
+// void print_token(void);
+void init_scanner(char *name);
+void quit_scanner(void);
+void get_token(void);
+void record_line_number(SYMTAB_NODE_PTR np, int number);
+void print_xref(SYMTAB_NODE_PTR np);
+
+void do_pass_1(void);
+void do_pass_2(void);
+void output_crunched_symtab(SYMTAB_NODE_PTR np);
+void output_crunched_token(void);
+
+
+
 /*--------------------------------------------------------------*/
 /*  Main program	Crunch a source file in two passes	*/
 /*			over the file.				*/
 /*--------------------------------------------------------------*/
 
-main(argc, argv)
-
-    int  argc;
-    char *argv[];
-
+main(int argc, char* argv[])
+//    int  argc;
+//    char *argv[];
 {
+    //jndex = 0;
     /*
     --  Initialize the scanner.
     */
     print_flag = FALSE;
-    init_scanner(argv[1]);
+    init_scanner((char*) argv[1]);
 
     /*
     --  Pass 1.
@@ -81,7 +103,7 @@ main(argc, argv)
     /*
     --  Pass 2.
     */
-    open_source_file(argv[1]);
+    open_source_file((char*) argv[1]);
     do_pass_2();
 
     fclose(crunch_file);
@@ -93,8 +115,7 @@ main(argc, argv)
 /*                              the symbol table.               */
 /*--------------------------------------------------------------*/
 
-do_pass_1()
-
+void do_pass_1(void)
 {
     SYMTAB_NODE_PTR np;         /* ptr to symtab node */
 
@@ -116,7 +137,7 @@ do_pass_1()
 		if ((np = search_symtab(word_string, symtab_root))
 			 == NULL) {
 		    np = enter_symtab(word_string, &symtab_root);
-		    np->info = (char *) index++;
+		    np->info = (char*)index++;
 		}
 		break;
 
@@ -125,7 +146,7 @@ do_pass_1()
 		if ((np = search_symtab(token_string, symtab_root))
 			 == NULL) {
 		    np = enter_symtab(token_string, &symtab_root);
-		    np->info = (char *) index++;
+		    np->info = index++;
 		}
 		break;
 
@@ -141,8 +162,7 @@ do_pass_1()
 /*                              output the crunched program.    */
 /*--------------------------------------------------------------*/
 
-do_pass_2()
-
+void do_pass_2(void)
 {
     SYMTAB_NODE_PTR np;         /* ptr to symtab node */
 
@@ -163,10 +183,8 @@ do_pass_2()
 /*                              in alphabetical order.          */
 /*--------------------------------------------------------------*/
 
-output_crunched_symtab(np)
-
-    SYMTAB_NODE_PTR np;         /* ptr to symtab subtree */
-
+void output_crunched_symtab(SYMTAB_NODE_PTR np)
+//    SYMTAB_NODE_PTR np;         /* ptr to symtab subtree */
 {
     char length;                /* byte-sized string length */
 
@@ -196,8 +214,7 @@ output_crunched_symtab(np)
 /*  output_crunched_token	Output a token record.		*/
 /*--------------------------------------------------------------*/
 
-output_crunched_token()
-
+void output_crunched_token(void)
 {
     SYMTAB_NODE_PTR np;                 /* ptr to symtab node */
     char            token_code = token; /* byte-sized token code */

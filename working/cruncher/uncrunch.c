@@ -17,6 +17,9 @@
 /****************************************************************/
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+
 #include "../common/common.h"
 #include "../common/scanner.h"
 
@@ -57,15 +60,28 @@ char *symbol_strings[] = {
 
 TOKEN_CLASS token_class();
 
+
+//
+// prototypes
+//
+
+//void print_token(void);
+void init_scanner(char *);
+void quit_scanner(void);
+void get_token(void);
+void read_crunched_symtab(void);
+void get_ctoken(void);
+
+
+
+
 /*--------------------------------------------------------------*/
 /*  Main program	Uncrunch a source file.			*/
 /*--------------------------------------------------------------*/
 
-main(argc, argv)
-
-    int  argc;
-    char *argv[];
-
+main(int argc, char* argv[])
+//    int  argc;
+//    char *argv[];
 {
     TOKEN_CLASS class;		/* current token class */
     TOKEN_CLASS prev_class;	/* previous token class */
@@ -123,9 +139,7 @@ main(argc, argv)
 /*                              and build an array of its name  */
 /*                              strings.                        */
 /*--------------------------------------------------------------*/
-
-read_crunched_symtab()
-
+void read_crunched_symtab(void)
 {
     short count;	/* number of symtab entries */
     short index;	/* symtab entry index */
@@ -158,9 +172,7 @@ read_crunched_symtab()
 /*                      symbol table name strings array or in   */
 /*                      the symbol strings array.               */
 /*--------------------------------------------------------------*/
-
-get_ctoken()
-
+void get_ctoken(void)
 {
     /*
     --  Read the crunched token code.
@@ -193,10 +205,7 @@ get_ctoken()
 /*--------------------------------------------------------------*/
 /*  token_class		Return the class of the current token.	*/
 /*--------------------------------------------------------------*/
-
-    TOKEN_CLASS
-token_class()
-
+TOKEN_CLASS token_class(void)
 {
     /*
     --  Nondelimiters:  identifiers, numbers, and reserved words
@@ -217,9 +226,7 @@ token_class()
 /*  append_blank	Append a blank to the output record,	*/
 /*			or flush the record if it is full.	*/
 /*--------------------------------------------------------------*/
-
-append_blank()
-
+void append_blank(void)
 {
     if (++record_length == MAX_OUTPUT_RECORD_LENGTH - 1)
 	flush_output_record();
@@ -232,9 +239,7 @@ append_blank()
 /*			current record and append the string	*/
 /*			to append to the new record.		*/
 /*--------------------------------------------------------------*/
-
-append_token()
-
+void append_token(void)
 {
     int token_length;           /* length of token string */
     
@@ -251,9 +256,7 @@ append_token()
 /*  flush_output_record		Flush the current output	*/
 /*				record.				*/
 /*--------------------------------------------------------------*/
-
-flush_output_record()
-
+void flush_output_record(void)
 {
     printf("%s\n", output_record);
     recp  = output_record;

@@ -14,37 +14,41 @@
 /****************************************************************/
 
 #include <stdio.h>
+#include <string.h>
+#include <stdlib.h>
+
 #include "../common/common.h"
 #include "../common/error.h"
 #include "../common/symtab.h"
 
+
+
 /*--------------------------------------------------------------*/
-/*  Globals							*/
+/*  Globals                                                     */
 /*--------------------------------------------------------------*/
 
 SYMTAB_NODE_PTR symtab_root = NULL;     /* symbol table root */
+
+SYMTAB_NODE_PTR search_symtab(char* , SYMTAB_NODE_PTR);
+SYMTAB_NODE_PTR enter_symtab(char* , SYMTAB_NODE_PTR*);
+
 
 /*--------------------------------------------------------------*/
 /*  search_symtab       Search for a name in the symbol table.  */
 /*                      Return a pointer of the entry if found, */
 /*                      or NULL if not.                         */
 /*--------------------------------------------------------------*/
-
-    SYMTAB_NODE_PTR
-search_symtab(name, np)
-
-    char            *name;	/* name to search for */
-    SYMTAB_NODE_PTR np;         /* ptr to symtab root */
-
+SYMTAB_NODE_PTR search_symtab(char* name, SYMTAB_NODE_PTR np)
+// char             *name;      /* name to search for */
+// SYMTAB_NODE_PTR  np;         /* ptr to symtab root */
 {
     int cmp;
-
     /*
     --  Loop to check each node.  Return if the node matches,
     --  else continue search down the left or right subtree.
     */
     while (np != NULL) {
-	cmp = strcmp(name, np->name);
+	cmp = strcmp((char*)name, np->name);
 	if (cmp == 0) return(np);               /* found */
 	np = cmp < 0 ? np->left : np->right;    /* continue search */
     }
@@ -56,15 +60,11 @@ search_symtab(name, np)
 /*  enter_symtab        Enter a name into the symbol table,     */
 /*                      and return a pointer to the new entry.  */
 /*--------------------------------------------------------------*/
-
-    SYMTAB_NODE_PTR
-enter_symtab(name, npp)
-
-    char            *name;	/* name to enter */
-    SYMTAB_NODE_PTR *npp;       /* ptr to ptr to symtab root */
-
+SYMTAB_NODE_PTR enter_symtab(char* name, SYMTAB_NODE_PTR* npp)
+// char             *name;      /* name to enter */
+// SYMTAB_NODE_PTR  *npp;       /* ptr to ptr to symtab root */
 {
-    int             cmp;	/* result of strcmp */
+    int             cmp;	    /* result of strcmp */
     SYMTAB_NODE_PTR new_nodep;	/* ptr to new entry */
     SYMTAB_NODE_PTR np;         /* ptr to node to test */
 
@@ -87,6 +87,6 @@ enter_symtab(name, npp)
 	npp = cmp < 0 ? &(np->left) : &(np->right);
     }
 
-    *npp = new_nodep;                   /* replace */
+    *npp = new_nodep;   /* replace */
     return(new_nodep);
 }
