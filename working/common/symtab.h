@@ -88,7 +88,10 @@ typedef struct symtab_node {
 /*  Functions                                                   */
 /*--------------------------------------------------------------*/
 
-SYMTAB_NODE_PTR search_symtab();
-SYMTAB_NODE_PTR enter_symtab();
+//SYMTAB_NODE_PTR search_symtab();
+//SYMTAB_NODE_PTR enter_symtab();
+SYMTAB_NODE_PTR search_symtab(char* , SYMTAB_NODE_PTR);
+SYMTAB_NODE_PTR enter_symtab(char* , SYMTAB_NODE_PTR*);
+
 
 #endif

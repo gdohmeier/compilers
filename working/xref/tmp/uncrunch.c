@@ -60,7 +60,6 @@ char *symbol_strings[] = {
 
 TOKEN_CLASS token_class();
 
-
 //
 // prototypes
 //
@@ -71,7 +70,10 @@ void quit_scanner(void);
 void get_token(void);
 void read_crunched_symtab(void);
 void get_ctoken(void);
-
+void append_blank(void);
+void append_token(void);
+void flush_output_record(void);
+TOKEN_CLASS token_class(void);
 
 
 
@@ -79,11 +81,11 @@ void get_ctoken(void);
 /*  Main program	Uncrunch a source file.			*/
 /*--------------------------------------------------------------*/
 
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 //    int  argc;
 //    char *argv[];
 {
-    TOKEN_CLASS class;		/* current token class */
+    TOKEN_CLASS class1;		/* current token class */
     TOKEN_CLASS prev_class;	/* previous token class */
     
     /*
@@ -113,19 +115,19 @@ main(int argc, char* argv[])
     --  or the end of file.
     */
     do {
-	get_ctoken();
-	if (ctoken == END_OF_FILE) break;
-	class = token_class();
+	    get_ctoken();
+	    if (ctoken == END_OF_FILE) break;
+	    class1 = token_class();
 
         /*
-	--  Append a blank only if two adjacent nondelimiters.
-	--  Then append the token string.
+	    --  Append a blank only if two adjacent nondelimiters.
+	    --  Then append the token string.
         */
-	if ((prev_class == NONDELIMITER) && (class == NONDELIMITER))
-	    append_blank();
-	append_token();
+	    if ((prev_class == NONDELIMITER) && (class1 == NONDELIMITER))
+	        append_blank();
 
-	prev_class = class;
+	    append_token();
+	    prev_class = class1;
     } while (ctoken != PERIOD);
 
     /*

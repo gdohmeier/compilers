@@ -77,6 +77,7 @@ int main(int argc, char *argv[])
     SYMTAB_NODE_PTR np;         /* ptr to symtab entry */
     LINENUM_HEADER_PTR hp;      /* ptr to line item list header */
 
+
     init_scanner(argv[1]);
 
     /*

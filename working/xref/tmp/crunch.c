@@ -44,7 +44,9 @@ extern SYMTAB_NODE_PTR symtab_root;
 /*  Globals                                                     */
 /*--------------------------------------------------------------*/
 
-short index = 0;        /* symtab entry index */
+/* symtab entry index */
+int64_t index1 = 0;
+
 FILE  *crunch_file;
 
 
@@ -71,7 +73,7 @@ void output_crunched_token(void);
 /*			over the file.				*/
 /*--------------------------------------------------------------*/
 
-main(int argc, char* argv[])
+int main(int argc, char* argv[])
 //    int  argc;
 //    char *argv[];
 {
@@ -97,7 +99,7 @@ main(int argc, char* argv[])
 	fprintf(stderr, "*** ERROR: Failed to open crunch file.\n");
 	exit(-2);
     }
-    fwrite(&index, sizeof(short), 1, crunch_file);
+    fwrite(&index1, sizeof(int), 1, crunch_file);
     output_crunched_symtab(symtab_root);
 
     /*
@@ -134,19 +136,17 @@ void do_pass_1(void)
 	switch (token) {
 
 	    case IDENTIFIER:
-		if ((np = search_symtab(word_string, symtab_root))
-			 == NULL) {
+		if ((np = search_symtab(word_string, symtab_root)) == NULL) {
 		    np = enter_symtab(word_string, &symtab_root);
-		    np->info = (char*)index++;
+		    np->info = (char *)index1++;
 		}
 		break;
 
 	    case NUMBER:
 	    case STRING:
-		if ((np = search_symtab(token_string, symtab_root))
-			 == NULL) {
+		if ((np = search_symtab(token_string, symtab_root)) == NULL) {
 		    np = enter_symtab(token_string, &symtab_root);
-		    np->info = index++;
+		    np->info = (char *)index1++;
 		}
 		break;
 
@@ -199,8 +199,8 @@ void output_crunched_symtab(SYMTAB_NODE_PTR np)
     --  Then, crunch the root of the subtree.
     */
     length = strlen(np->name) + 1;
-    index  = (short) np->info;
-    fwrite(&index,  sizeof(short), 1, crunch_file);
+    index1  = (int) np->info;
+    fwrite(&index1,  sizeof(int), 1, crunch_file);
     fwrite(&length, 1,             1, crunch_file);
     fwrite(np->name,length,        1, crunch_file);
 
@@ -233,15 +233,15 @@ void output_crunched_token(void)
 
 	case IDENTIFIER:
 	    np = search_symtab(word_string, symtab_root);
-	    index = (short) np->info;
-	    fwrite(&index, sizeof(short), 1, crunch_file);
+	    index1 = (int)np->info;
+	    fwrite(&index1, sizeof(int), 1, crunch_file);
 	    break;
 
 	case NUMBER:
 	case STRING:
 	    np = search_symtab(token_string, symtab_root);
-	    index = (short) np->info;
-	    fwrite(&index, sizeof(short), 1, crunch_file);
+	    index1 = (int)np->info;
+	    fwrite(&index1, sizeof(int), 1, crunch_file);
 	    break;
 
 	default:
