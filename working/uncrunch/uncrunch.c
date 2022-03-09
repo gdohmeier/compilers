@@ -92,9 +92,11 @@ int main(int argc, char* argv[])
     --  Open the crunch file.
     */
     crunch_file = fopen(argv[1], "rb");
+
     if (crunch_file == NULL) {
-	printf("*** Error: Failed to open crunch file.\n");
-	exit(-2);
+	    printf("*** Error: Failed to open crunch file-out.\n");
+	    printf("*** SYNTAX: uncrunch <crunchfile im>.\n");
+	    exit(-2);
     }
 
     /*

@@ -74,10 +74,7 @@ void output_crunched_token(void);
 /*--------------------------------------------------------------*/
 
 int main(int argc, char* argv[])
-//    int  argc;
-//    char *argv[];
 {
-    //jndex = 0;
     /*
     --  Initialize the scanner.
     */
@@ -94,10 +91,11 @@ int main(int argc, char* argv[])
     --  Open the crunch file and output the crunched
     --  symbol table.
     */
-    crunch_file = fopen(argv[2], "wb");
+    crunch_file = fopen(argv[2], "w");
     if (crunch_file == NULL) {
-	fprintf(stderr, "*** ERROR: Failed to open crunch file.\n");
-	exit(-2);
+	    fprintf(stderr, "*** ERROR: Failed to open crunch file-out.\n");
+	    fprintf(stderr, "*** SYNTAX: crunch <sourcefile in> <crunchfile out>.\n");
+	    exit(-2);
     }
     fwrite(&index1, sizeof(int), 1, crunch_file);
     output_crunched_symtab(symtab_root);
@@ -164,7 +162,7 @@ void do_pass_1(void)
 
 void do_pass_2(void)
 {
-    SYMTAB_NODE_PTR np;         /* ptr to symtab node */
+    //SYMTAB_NODE_PTR np;         /* ptr to symtab node */
 
     /*
     --  Repeatedly process tokens until a period

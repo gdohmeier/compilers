@@ -386,7 +386,7 @@ void get_word(void)
     /*
     --  Extract the word.
     */
-    while ((char_code(ch) == LETTER) || (char_code(ch) == DIGIT)) {
+    while ((char_code((int)ch) == LETTER) || (char_code((int)ch) == DIGIT)) {
 	*tokenp++ = ch;
 	get_char();
     }
@@ -414,7 +414,7 @@ void get_number(void)
 	else count_error = TRUE;
 
 	get_char();
-    } while (char_code(ch) == DIGIT);
+    } while (char_code((int)ch) == DIGIT);
     if (count_error) {
 	token = ERROR;
 	return;
@@ -454,7 +454,7 @@ void get_token(void)
     skip_blanks();
     tokenp = token_string;
 
-    switch (char_code(ch)) {
+    switch (char_code((int)ch)) {
 	case LETTER:    get_word();             break;
 	case DIGIT:     get_number();           break;
 	case EOF_CODE:  token = END_OF_FILE;    break;

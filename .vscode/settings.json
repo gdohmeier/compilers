@@ -1,8 +1,5 @@
 {
     "files.associations": {
-        "SYMTAB.C": "cpp",
-        "UNCRUNCH.C": "cpp",
-        "CRUNCH.C": "cpp",
-        "XREF.C": "cpp"
+      
     }
 }

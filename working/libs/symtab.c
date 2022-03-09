@@ -29,6 +29,8 @@
 
 SYMTAB_NODE_PTR symtab_root = NULL;     /* symbol table root */
 
+// prototypes
+
 SYMTAB_NODE_PTR search_symtab(char* , SYMTAB_NODE_PTR);
 SYMTAB_NODE_PTR enter_symtab(char* , SYMTAB_NODE_PTR*);
 

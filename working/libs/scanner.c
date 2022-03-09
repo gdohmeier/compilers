@@ -298,7 +298,7 @@ void get_token(void)
     skip_blanks();
     tokenp = token_string;
 
-    switch (char_code(ch)) {
+    switch (char_code( (int)ch)) {
 	case LETTER:    get_word();             break;
 	case DIGIT:     get_number();           break;
 	case QUOTE:     get_string();           break;
@@ -321,7 +321,7 @@ void get_word(void)
     /*
     --  Extract the word.
     */
-    while ((char_code(ch) == LETTER) || (char_code(ch) == DIGIT)) {
+    while ((char_code((int)ch) == LETTER) || (char_code((int)ch) == DIGIT)) {
 	*tokenp++ = ch;
 	get_char();
     }
@@ -602,7 +602,7 @@ void accumulate_value(float *valuep, ERROR_CODE error_code)
     /*
     --  Error if the first character is not a digit.
     */
-    if (char_code(ch) != DIGIT) {
+    if (char_code((int)ch) != DIGIT) {
 	error(error_code);
 	token = ERROR;
 	return;
@@ -620,7 +620,7 @@ void accumulate_value(float *valuep, ERROR_CODE error_code)
 	else count_error = TRUE;
 
 	get_char();
-    } while (char_code(ch) == DIGIT);
+    } while (char_code((int)ch) == DIGIT);
 
     *valuep = value;
 }

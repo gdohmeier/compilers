@@ -61,10 +61,8 @@ void quit_scanner(void);
 void get_token(void);
 void record_line_number(SYMTAB_NODE_PTR, int);
 void print_xref(SYMTAB_NODE_PTR);
-
 SYMTAB_NODE_PTR search_symtab(char* , SYMTAB_NODE_PTR);
 SYMTAB_NODE_PTR enter_symtab(char* , SYMTAB_NODE_PTR*);
-
 
 
 /*--------------------------------------------------------------*/

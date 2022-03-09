@@ -56,6 +56,7 @@ char source_buffer[MAX_SOURCE_LINE_LENGTH]; /* source file buffer */
 char source_name[MAX_FILE_NAME_LENGTH]; /* name of source file */
 char date[DATE_STRING_LENGTH];          /* current date and time */
 
+
 FILE *source_file;
 
 /*--------------------------------------------------------------*/
